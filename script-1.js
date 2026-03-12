@@ -217,47 +217,6 @@ function initThreeNetwork() {
     
 }
 
-// function initBenefitsScroll() {
-
-//     const section = document.querySelector(".benefits-section");
-//     const cards = gsap.utils.toArray(".benefit-card");
-//     const title = section.querySelector(".section-header h2");
-
-//     const tl = gsap.timeline({
-//         scrollTrigger: {
-//             trigger: section,
-//             start: "top top",
-//             end: "+=" + (cards.length * 1200 + 600),
-//             scrub: 1,
-//             pin: true,
-//             anticipatePin: 1
-//         }
-//     });
-
-//     // título
-//     tl.from(title, {
-//         opacity: 0,
-//         y: 50,
-//         duration: 1
-//     });
-
-//     cards.forEach((card) => {
-
-//         tl.fromTo(card,
-//             { opacity: 0, y: 100 },
-//             { opacity: 1, y: -130, duration: 1.5 }
-//         );
-
-//         // pausa
-//         tl.to(card, {}, "+=2");
-
-//         tl.to(card,
-//             { opacity: 0, y: 0, duration: 1.5 }
-//         );
-
-//     });
-// }
-
 function initBenefitsScroll() {
 
     const section = document.querySelector(".benefits-section");
@@ -301,3 +260,37 @@ function initBenefitsScroll() {
     });
 
 }
+
+function initAboutScroll() {
+    const section = document.querySelector(".about-section");
+    const h2s = section.querySelectorAll("h2");
+    const paragraphs = section.querySelectorAll("p");
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: "+=2000", // aumenta a duração para caber todos os efeitos
+            scrub: true,
+            pin: true
+        }
+    });
+
+    // 1º e 3º h2: zoom e desaparecem ao rolar
+    tl.to(h2s[0], { scale: 5, x: -500, y: -300, opacity: 0, duration: 1, ease: "power2.in" }, 0);
+    tl.to(h2s[2], { scale: 5, x: 500, y: 300, opacity: 0, duration: 1, ease: "power2.in" }, 0);
+
+    // 2º h2 central: aparece com zoom “estourando a tela”
+    tl.to(h2s[1], { opacity: 1, scale: 10, duration: 1, ease: "power2.out" }, "+=0.2");
+
+    // troca do background **após o zoom do segundo h2**
+    tl.to(section, { backgroundColor: "#fff", duration: 0.5, ease: "power1.inOut" });
+
+    // exibe os parágrafos **depois da troca de cor**
+    tl.fromTo(paragraphs,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, stagger: 0.2, duration: 1 }
+    );
+}
+
+window.addEventListener('load', initAboutScroll);
