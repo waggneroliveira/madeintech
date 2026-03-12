@@ -480,8 +480,8 @@ section {
 .about-section h2:nth-of-type(1) {
     top: 2rem;
     left: 2rem;
-    font-size: 4.5rem;
-    line-height: 80px;
+    font-size: 6rem;
+    line-height: 90px;
 }
 
 .about-section h2:nth-of-type(2) {
@@ -495,8 +495,8 @@ section {
 .about-section h2:nth-of-type(3) {
     bottom: 2rem;
     right: 2rem;
-    font-size: 4.5rem;
-    line-height: 80px;
+    font-size: 6rem;
+    line-height: 90px;
     text-align: end;
 }
 .about-grid {

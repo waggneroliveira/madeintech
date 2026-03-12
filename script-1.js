@@ -281,7 +281,7 @@ function initAboutScroll() {
     tl.to(h2s[2], { scale: 5, x: 500, y: 300, opacity: 0, duration: 1, ease: "power2.in" }, 0);
 
     // 2º h2 central: aparece com zoom “estourando a tela”
-    tl.to(h2s[1], { opacity: 1, scale: 10, duration: 1, ease: "power2.out" }, "+=0.2");
+    tl.to(h2s[1], { opacity: 1, scale: 15, duration: 1, ease: "power2.out" }, "-=0.3");
 
     // troca do background **após o zoom do segundo h2**
     tl.to(section, { backgroundColor: "#fff", duration: 0.5, ease: "power1.inOut" });
