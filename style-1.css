@@ -558,7 +558,7 @@ section {
 
 .founder-stats {
     display: flex;
-    gap: 2rem;
+    gap: 4rem;
     justify-content: center;
     width: 100%;
     grid-column: 1 / -1; /* faz ocupar todas as colunas do grid */
@@ -568,6 +568,8 @@ section {
 .stat {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .stat-number {

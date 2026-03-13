@@ -288,51 +288,8 @@ function initAboutScroll() {
     );
 }
 
-// function initBenefitsScroll() {
-
-//     const section = document.querySelector(".benefits-section");
-//     const cards = gsap.utils.toArray(".benefit-card");
-//     const title = section.querySelector(".section-header h2");
-
-//     gsap.set(cards, { y: "50vh" });
-
-//     const tl = gsap.timeline({
-//         scrollTrigger: {
-//             trigger: section,
-//             start: "top top",
-//             end: "+=" + (cards.length * 800 + 1200),
-//             scrub: 2,
-//             pin: true,
-//             anticipatePin: 1
-//         }
-//     });
-
-//     // fundo aparece suavemente
-//     tl.to(section, {
-//         backgroundColor: "rgba(0,0,0,0.47)",
-//         duration: 1
-//     });
-
-//     // título
-//     tl.from(title, {
-//         opacity: 0,
-//         y: 50,
-//         duration: 1
-//     });
-
-//     cards.forEach((card) => {
-
-//         tl.to(card, { y: 0, duration: 1.2 });
-
-//         // tl.to({}, { duration: 1 });
-
-//         tl.to(card, { y: "-160vh", duration: 1.5 });
-
-//     });
-
-// }
-
 function initBenefitsScroll() {
+
     const section = document.querySelector(".benefits-section");
     const cards = gsap.utils.toArray(".benefit-card");
     const title = section.querySelector(".section-header h2");
@@ -343,7 +300,7 @@ function initBenefitsScroll() {
         scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "+=" + (cards.length * 800 + 1200),
+            end: "+=" + (cards.length * 800 + 900),
             scrub: 2,
             pin: true,
             anticipatePin: 1
@@ -363,13 +320,16 @@ function initBenefitsScroll() {
         duration: 1
     });
 
-    const overlap = 1; // quanto antes o próximo card começa a entrar (0 = sem overlap, 1 = completamente sobreposto)
+    cards.forEach((card) => {
 
-    cards.forEach((card, i) => {
-        // entrada do card
-        tl.to(card, { y: 0, duration: 1.2 }, `-=${i === 0 ? 0 : overlap}`); 
-        // saída do card
-        tl.to(card, { y: "-160vh", duration: 1.5 }, `-=${overlap}`);
+        tl.to(card, { y: 0, duration: 1.2 });
+
+        // tl.to({}, { duration: 1 });
+
+        tl.to(card, { y: "-135vh", duration: 1.5 });
+
     });
+
 }
+
 
