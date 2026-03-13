@@ -20,6 +20,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Anton", sans-serif;
+    font-style: normal;
 }
 
 html {
@@ -414,6 +416,10 @@ section {
     line-height: 1.2;
     color: white;
     text-transform: uppercase;
+    max-width: 340px;
+    margin: 0 auto;
+    border-left: 4px solid var(--primary);
+    padding-left: 25px;
 }
 
 .benefits-right {
@@ -480,8 +486,8 @@ section {
 .about-section h2:nth-of-type(1) {
     top: 2rem;
     left: 2rem;
-    font-size: 6rem;
-    line-height: 90px;
+    font-size: 8rem;
+    line-height: 137px;
 }
 
 .about-section h2:nth-of-type(2) {
@@ -493,15 +499,15 @@ section {
 }
 
 .about-section h2:nth-of-type(3) {
-    bottom: 2rem;
+    bottom: 14rem;
     right: 2rem;
-    font-size: 6rem;
-    line-height: 90px;
+    font-size: 8rem;
+    line-height: 137px;
     text-align: end;
 }
 .about-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     gap: 4rem;
     align-items: center;
 }
@@ -553,6 +559,10 @@ section {
 .founder-stats {
     display: flex;
     gap: 2rem;
+    justify-content: center;
+    width: 100%;
+    grid-column: 1 / -1; /* faz ocupar todas as colunas do grid */
+    margin-top: 2rem;    /* espaçamento opcional em relação ao conteúdo acima */
 }
 
 .stat {
@@ -561,8 +571,8 @@ section {
 }
 
 .stat-number {
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 4rem;
+    font-weight: 500;
     background: var(--gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -570,7 +580,7 @@ section {
 
 .stat-label {
     color: var(--gray);
-    font-size: 0.875rem;
+    font-size: 1.25rem;
 }
 
 /* Card do fundador */
