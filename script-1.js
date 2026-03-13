@@ -8,6 +8,7 @@ function init() {
     initThreeNetwork();
     initBenefitsScroll();
     initAboutScroll();
+    initTechCarousel();
 
     // força recalculo dos pins
     ScrollTrigger.refresh();
@@ -239,8 +240,8 @@ function initAboutScroll() {
     });
 
     // 1º e 3º h2: zoom e desaparecem ao rolar
-    tl.to(h2s[0], { scale: 5, x: -500, y: -300, opacity: 0, duration: 1, ease: "power2.in" }, 0);
-    tl.to(h2s[2], { scale: 5, x: 500, y: 300, opacity: 0, duration: 1, ease: "power2.in" }, 0);
+    tl.to(h2s[0], { scale: 5, x: -800, y: -800, opacity: 0, duration: 1, ease: "power4.in" }, 0);
+    tl.to(h2s[2], { scale: 5, x: 800, y: 800, opacity: 0, duration: 1, ease: "power4.in" }, 0);
 
     // 2º h2 começa antes dos outros terminarem
     tl.fromTo(
@@ -254,7 +255,7 @@ function initAboutScroll() {
             opacity: 1,
             scale: 80,
             duration: 1.5,
-            ease: "power3.in"
+            ease: "power4.in"
         },
         "-=0.9"
     );
@@ -263,7 +264,7 @@ function initAboutScroll() {
     tl.to(section, { 
         backgroundColor: "#fff",
         duration: 0.35,
-        ease: "power2.out"
+        ease: "power4.out"
     }, "<1");
 
     // texto continua atravessando a tela
@@ -271,7 +272,7 @@ function initAboutScroll() {
         opacity: 0,
         scale: 120,
         duration: 0.6,
-        ease: "power2.out"
+        ease: "power4.out"
     }, "<");
 
     // exibe os parágrafos **depois da troca de cor**
@@ -283,7 +284,7 @@ function initAboutScroll() {
     tl.fromTo(
         extras,
         { opacity: 0, y: 60 },
-        { opacity: 1, y: 0, duration: 1, ease: "power2.out" },
+        { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
         "-=0.3"
     );
 }
@@ -323,13 +324,39 @@ function initBenefitsScroll() {
     cards.forEach((card) => {
 
         tl.to(card, { y: 0, duration: 1.2 });
-
-        // tl.to({}, { duration: 1 });
-
         tl.to(card, { y: "-135vh", duration: 1.5 });
 
     });
 
 }
+
+function initTechCarousel() {
+    const section = document.querySelector(".tech-section");
+    const grid = document.querySelector(".tech-grid");
+
+    const gridWidth = grid.scrollWidth;
+    const sectionWidth = section.offsetWidth;
+
+    // Começa totalmente fora da tela à direita
+    const distance = gridWidth; 
+
+    gsap.fromTo(grid,
+        { x: distance }, // totalmente à direita, fora da tela
+        {
+            x: 0, // posição final
+            ease: "none",
+            scrollTrigger: {
+                trigger: section,
+                start: "top top",
+                end: () => `+=${section.offsetHeight + distance}`, // altura da sessão + distância do grid
+                scrub: true,
+                pin: true // mantém a seção fixa enquanto rola
+            }
+        }
+    );
+}
+
+
+
 
 

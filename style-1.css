@@ -56,12 +56,10 @@ header {
     justify-content: space-between;
     align-items: center;
     z-index: 0;
-    /* background: #343940; */
-    /* backdrop-filter: blur(10px); */
-    /* border-bottom: 1px solid rgba(0, 255, 255, 0.1); */
     transition: var(--transition);
     opacity: 1 !important;
     visibility: visible !important;
+    max-width: 1440px;
 }
 
 header.scrolled {
@@ -175,6 +173,7 @@ section {
     grid-template-columns: 2fr 1fr;
     gap: 4rem;
     align-items: center;
+    margin: 0;
 }
 
 .hero-content {
@@ -409,6 +408,52 @@ section {
     flex-direction: column;
     justify-content: center;
     text-align: left;
+    position: relative;
+}
+
+/* ícones */
+.icon-position{
+    position: absolute;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+/* posições aleatórias */
+.icon-position:nth-child(1){
+    top: 12%;
+    left: 12%;
+}
+
+.icon-position:nth-child(2){
+    top: 3%;
+    left: 33%;
+}
+
+.icon-position:nth-child(3){
+    top: 40%;
+    left: 4%;
+}
+
+.icon-position:nth-child(4){
+    top: 60%;
+    left: 29%;
+}
+
+.icon-position:nth-child(5){
+    bottom: 15%;
+    left: 15%;
+}
+
+.icon-position:nth-child(6){
+    bottom: 10%;
+    left: 26%;
+}
+
+/* tamanhos variados */
+.icon-position svg{
+    width: 60px;
+    height: auto;
+    opacity: .4;
 }
 
 .benefits-left h2 {
@@ -491,7 +536,7 @@ section {
 }
 
 .about-section h2:nth-of-type(2) {
-    top: 50%;
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.6);
     font-size: 4rem;
@@ -499,7 +544,7 @@ section {
 }
 
 .about-section h2:nth-of-type(3) {
-    bottom: 14rem;
+    bottom: 26rem;
     right: 2rem;
     font-size: 8rem;
     line-height: 137px;
@@ -556,25 +601,25 @@ section {
     font-size: 0.875rem;
 }
 
+/* STATS */
+
 .founder-stats {
     display: flex;
     gap: 4rem;
     justify-content: center;
     width: 100%;
-    grid-column: 1 / -1; /* faz ocupar todas as colunas do grid */
-    margin-top: 2rem;    /* espaçamento opcional em relação ao conteúdo acima */
+    margin-top: 1rem;
 }
 
 .stat {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
 .stat-number {
-    font-size: 4rem;
-    font-weight: 500;
+    font-size: 2rem;
+    font-weight: 600;
     background: var(--gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -582,7 +627,49 @@ section {
 
 .stat-label {
     color: var(--gray);
-    font-size: 1.25rem;
+    font-size: 0.938rem;
+}
+
+.founder-benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem 2rem;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.founder-benefits h3{
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    color: var(--dark);
+    text-align: left;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: var(--gray);
+    position: relative;
+    padding-left: 28px;
+    transition: all .3s ease;
+}
+.benefit-item:hover {
+    transform: translateX(6px);
+    color: var(--secondary);
+}
+.benefit-item::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
 }
 
 /* Card do fundador */
@@ -605,6 +692,7 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 .citation {
     display: flex;
@@ -614,6 +702,7 @@ section {
 }
 .citation .image{
     background: #EAEAEA;
+    border-radius: 5px;
     width: 280px;
     height: 343px;
 }
@@ -633,24 +722,37 @@ section {
 
 /* ===== TECNOLOGIAS ===== */
 .tech-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    width: max-content;
+}
+.tech-section{
+    overflow: hidden;
+    position: relative;
+}
+.tech-item {
+    width: 200px;
+    height: 120px;
+    border-radius: 15px;
+    background: var(--light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    transition: transform .3s ease, box-shadow .3s ease;
 }
 
-.tech-item {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    padding: 1.5rem;
-    border-radius: 15px;
-    text-align: center;
-    border: 1px solid rgba(0, 255, 255, 0.1);
-    font-weight: 600;
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-    opacity: 1 !important;
-    visibility: visible !important;
+.tech-item img{
+    max-width: 100%;
+    max-height: 60px;
+    object-fit: contain;
+}
+
+.tech-item:hover{
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
 }
 
 .tech-item:hover {
