@@ -224,13 +224,14 @@ function initThreeNetwork() {
 function initAboutScroll() {
     const section = document.querySelector(".about-section");
     const h2s = section.querySelectorAll("h2");
-    const paragraphs = section.querySelectorAll("p");
+    const paragraphs = gsap.utils.toArray(".about-content p");
+    const extras = gsap.utils.toArray(".citation, .founder-stats, .about-visual");
 
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "+=2000", // aumenta a duração para caber todos os efeitos
+            end: "+=620%", // aumenta a duração para caber todos os efeitos
             scrub: true,
             pin: true,
             refreshPriority: 1
@@ -241,16 +242,49 @@ function initAboutScroll() {
     tl.to(h2s[0], { scale: 5, x: -500, y: -300, opacity: 0, duration: 1, ease: "power2.in" }, 0);
     tl.to(h2s[2], { scale: 5, x: 500, y: 300, opacity: 0, duration: 1, ease: "power2.in" }, 0);
 
-    // 2º h2 central: aparece com zoom “estourando a tela”
-    tl.to(h2s[1], { opacity: 1, scale: 15, duration: 1, ease: "power2.out" }, "-=0.3");
+    // 2º h2 começa antes dos outros terminarem
+    tl.fromTo(
+        h2s[1],
+        {
+            opacity: 0.7,
+            scale: 0,
+            transformOrigin: "center center"
+        },
+        {
+            opacity: 1,
+            scale: 80,
+            duration: 1.5,
+            ease: "power3.in"
+        },
+        "-=0.9"
+    );
 
-    // troca do background **após o zoom do segundo h2**
-    tl.to(section, { backgroundColor: "#fff", duration: 0.5, ease: "power1.inOut" });
+    // background entra exatamente no final do zoom
+    tl.to(section, { 
+        backgroundColor: "#fff",
+        duration: 0.35,
+        ease: "power2.out"
+    }, "<1.4");
+
+    // texto continua atravessando a tela
+    tl.to(h2s[1], {
+        opacity: 0,
+        scale: 120,
+        duration: 0.6,
+        ease: "power2.out"
+    }, "<");
 
     // exibe os parágrafos **depois da troca de cor**
     tl.fromTo(paragraphs,
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, stagger: 0.2, duration: 1 }
+    );
+
+    tl.fromTo(
+        extras,
+        { opacity: 0, y: 60 },
+        { opacity: 1, y: 0, duration: 1, ease: "power2.out" },
+        "-=0.3"
     );
 }
 

@@ -487,7 +487,7 @@ section {
 .about-section h2:nth-of-type(2) {
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, -50%) scale(0.6);
     font-size: 4rem;
     opacity: 0;
 }
@@ -531,7 +531,7 @@ section {
 }
 
 .quote-text {
-    font-size: 1.125rem;
+    font-size: 0.938rem;
     font-style: italic;
     margin-bottom: 1rem;
 }
@@ -583,13 +583,8 @@ section {
 .founder-image {
     width: 100%;
     height: 100%;
-    background: var(--dark-gray);
-    border-radius: 20px;
     overflow: hidden;
     position: relative;
-    border: 2px solid transparent;
-    background: linear-gradient(var(--dark), var(--dark)) padding-box,
-                var(--gradient) border-box;
 }
 
 .image-placeholder {
@@ -599,24 +594,23 @@ section {
     align-items: center;
     justify-content: center;
 }
-
+.citation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.citation .image{
+    background: #EAEAEA;
+    width: 280px;
+    height: 343px;
+}
 .placeholder-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
     font-size: 3rem;
-}
-
-.network-pulse {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    animation: pulse 2s ease-out infinite;
 }
 
 @keyframes pulse {
