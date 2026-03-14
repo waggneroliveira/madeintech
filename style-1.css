@@ -719,6 +719,11 @@ section {
     70% { box-shadow: 0 0 0 50px rgba(0, 255, 255, 0); }
     100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
 }
+/* .tech-grid,
+.benefit-card,
+.about-content__title {
+    will-change: transform, opacity;
+} */
 
 /* ===== TECNOLOGIAS ===== */
 .tech-grid {

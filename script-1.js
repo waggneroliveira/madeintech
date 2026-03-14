@@ -1,18 +1,10 @@
 // registrar plugin
 gsap.registerPlugin(ScrollTrigger);
 
-// ===== INICIALIZAÇÃO =====
-window.addEventListener('load', init);
+ScrollTrigger.config({
+    limitCallbacks: true
+});
 
-function init() {
-    initThreeNetwork();
-    initBenefitsScroll();
-    initAboutScroll();
-    initTechCarousel();
-
-    // força recalculo dos pins
-    ScrollTrigger.refresh();
-}
 
 // ===== THREE.JS - REDE DE PARTÍCULAS =====
 function initThreeNetwork() {
@@ -41,17 +33,14 @@ function initThreeNetwork() {
         .appendChild(renderer.domElement);
 
 
-    // ===== CONFIGURAÇÕES =====
-
     const particlesCount = 800;
 
     const particlesGeometry = new THREE.BufferGeometry();
 
     const particlesPositions = new Float32Array(particlesCount * 3);
+    const basePositions = new Float32Array(particlesCount * 3);
     const particlesColors = new Float32Array(particlesCount * 3);
 
-
-    // ===== CRIAÇÃO DAS PARTÍCULAS =====
 
     for (let i = 0; i < particlesCount; i++) {
 
@@ -59,11 +48,18 @@ function initThreeNetwork() {
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos((Math.random() * 2) - 1);
 
-        particlesPositions[i * 3] = Math.sin(phi) * Math.cos(theta) * radius;
-        particlesPositions[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * radius;
-        particlesPositions[i * 3 + 2] = Math.cos(phi) * radius;
+        const x = Math.sin(phi) * Math.cos(theta) * radius;
+        const y = Math.sin(phi) * Math.sin(theta) * radius;
+        const z = Math.cos(phi) * radius;
 
-        // branco suave
+        particlesPositions[i * 3] = x;
+        particlesPositions[i * 3 + 1] = y;
+        particlesPositions[i * 3 + 2] = z;
+
+        basePositions[i * 3] = x;
+        basePositions[i * 3 + 1] = y;
+        basePositions[i * 3 + 2] = z;
+
         particlesColors[i * 3] = 0.85;
         particlesColors[i * 3 + 1] = 0.85;
         particlesColors[i * 3 + 2] = 0.85;
@@ -80,8 +76,6 @@ function initThreeNetwork() {
     );
 
 
-    // ===== MATERIAL =====
-
     const particlesMaterial = new THREE.PointsMaterial({
         size: 0.15,
         vertexColors: true,
@@ -92,16 +86,12 @@ function initThreeNetwork() {
     });
 
 
-    // ===== PARTICLES =====
-
     const particles = new THREE.Points(particlesGeometry, particlesMaterial);
 
     particles.position.x = 6;
 
     scene.add(particles);
 
-
-    // ===== CONEXÕES =====
 
     const connectionGeometry = new THREE.BufferGeometry();
     const connectionPositions = [];
@@ -156,8 +146,6 @@ function initThreeNetwork() {
     camera.position.z = 20;
 
 
-    // ===== MOUSE =====
-
     let mouseX = 0;
     let mouseY = 0;
 
@@ -168,8 +156,6 @@ function initThreeNetwork() {
 
     });
 
-
-    // ===== ANIMAÇÃO =====
 
     let time = 0;
 
@@ -190,9 +176,9 @@ function initThreeNetwork() {
 
         for (let i = 0; i < positions.length; i += 3) {
 
-            const wave = Math.sin(time + positions[i] * 0.5) * 0.02;
+            const wave = Math.sin(time + basePositions[i] * 0.5) * 0.02;
 
-            positions[i + 1] += wave * 0.01;
+            positions[i + 1] = basePositions[i + 1] + wave;
 
         }
 
@@ -203,8 +189,6 @@ function initThreeNetwork() {
 
     animate();
 
-
-    // ===== RESPONSIVO =====
 
     window.addEventListener('resize', () => {
 
@@ -219,12 +203,15 @@ function initThreeNetwork() {
 
     });
 
-    
 }
 
+
+
+// ===== ABOUT =====
 function initAboutScroll() {
+
     const section = document.querySelector(".about-section");
-    const h2s = section.querySelectorAll("h2");
+    const h2s = section.querySelectorAll(".about-content__title");
     const paragraphs = gsap.utils.toArray(".about-content p");
     const extras = gsap.utils.toArray(".citation, .founder-stats, .about-visual");
 
@@ -232,50 +219,29 @@ function initAboutScroll() {
         scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "+=620%", // aumenta a duração para caber todos os efeitos
+            end: "+=620%",
             scrub: 2,
             pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
             refreshPriority: 1
         }
     });
 
-    // 1º e 3º h2: zoom e desaparecem ao rolar
     tl.to(h2s[0], { scale: 5, x: -800, y: -800, opacity: 0, duration: 1, ease: "power4.in" }, 0);
     tl.to(h2s[2], { scale: 5, x: 800, y: 800, opacity: 0, duration: 1, ease: "power4.in" }, 0);
 
-    // 2º h2 começa antes dos outros terminarem
     tl.fromTo(
         h2s[1],
-        {
-            opacity: 0.7,
-            scale: 0,
-            transformOrigin: "center center"
-        },
-        {
-            opacity: 1,
-            scale: 80,
-            duration: 1.5,
-            ease: "power4.in"
-        },
+        { opacity: 0.7, scale: 0, transformOrigin: "center center" },
+        { opacity: 1, scale: 80, duration: 1.5, ease: "power4.in" },
         "-=0.9"
     );
 
-    // background entra exatamente no final do zoom
-    tl.to(section, { 
-        backgroundColor: "#fff",
-        duration: 0.35,
-        ease: "power4.out"
-    }, "<1");
+    tl.to(section, { backgroundColor: "#fff", duration: 0.35, ease: "power4.out" }, "<1");
 
-    // texto continua atravessando a tela
-    tl.to(h2s[1], {
-        opacity: 0,
-        scale: 120,
-        duration: 0.6,
-        ease: "power4.out"
-    }, "<");
+    tl.to(h2s[1], { opacity: 0, scale: 120, duration: 0.6, ease: "power4.out" }, "<");
 
-    // exibe os parágrafos **depois da troca de cor**
     tl.fromTo(paragraphs,
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, stagger: 0.2, duration: 1 }
@@ -289,11 +255,14 @@ function initAboutScroll() {
     );
 }
 
+
+
+// ===== BENEFITS =====
 function initBenefitsScroll() {
 
     const section = document.querySelector(".benefits-section");
     const cards = gsap.utils.toArray(".benefit-card");
-    const title = section.querySelector(".section-header h2");
+    const title = section.querySelector(".section-header__title");
 
     gsap.set(cards, { y: "50vh" });
 
@@ -304,22 +273,21 @@ function initBenefitsScroll() {
             end: "+=" + (cards.length * 800 + 900),
             scrub: 2,
             pin: true,
-            anticipatePin: 1
+            anticipatePin: 1,
+            invalidateOnRefresh: true
         }
     });
 
-    // fundo aparece suavemente
     tl.to(section, {
         backgroundColor: "rgba(0,0,0,0.47)",
         duration: 1
     });
 
-    // título
-    tl.from(title, {
-        opacity: 0,
-        y: 50,
-        duration: 1
-    });
+    tl.fromTo(
+        title,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1 }
+    );
 
     cards.forEach((card) => {
 
@@ -330,33 +298,54 @@ function initBenefitsScroll() {
 
 }
 
+
+
+// ===== TECH =====
 function initTechCarousel() {
+
     const section = document.querySelector(".tech-section");
     const grid = document.querySelector(".tech-grid");
+    const title = section.querySelector(".tech-grid__title");
 
     const gridWidth = grid.scrollWidth;
-    const sectionWidth = section.offsetWidth;
+    const distance = gridWidth;
 
-    // Começa totalmente fora da tela à direita
-    const distance = gridWidth; 
-
-    gsap.fromTo(grid,
-        { x: distance }, // totalmente à direita, fora da tela
-        {
-            x: 0, // posição final
-            ease: "none",
-            scrollTrigger: {
-                trigger: section,
-                start: "top top",
-                end: () => `+=${section.offsetHeight + distance}`, // altura da sessão + distância do grid
-                scrub: true,
-                pin: true // mantém a seção fixa enquanto rola
-            }
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: () => `+=${section.offsetHeight + distance}`,
+            scrub: true,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true
         }
+    });
+
+    tl.fromTo(
+        title,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1 }
+    );
+
+    tl.fromTo(
+        grid,
+        { x: distance },
+        { x: 0, ease: "none" },
+        "<"
     );
 }
 
 
 
+// ===== INIT =====
+window.addEventListener("load", () => {
 
+    initThreeNetwork();
+    initAboutScroll();
+    initBenefitsScroll();
+    initTechCarousel();
 
+    ScrollTrigger.refresh();
+
+});
