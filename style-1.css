@@ -726,7 +726,7 @@ section {
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    width: max-content;
+    width: 100%;
 }
 .tech-section{
     overflow: hidden;
