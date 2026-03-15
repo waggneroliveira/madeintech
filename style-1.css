@@ -522,12 +522,12 @@ section {
     text-transform: uppercase;
     font-weight: bold;
     transform-origin: center;
+    font-size: clamp(2.2rem, 8vw, 8rem);
 }
 
 .about-section h2:nth-of-type(1) {
     top: 2rem;
     left: 2rem;
-    font-size: 8rem;
     line-height: 137px;
 }
 
@@ -535,14 +535,12 @@ section {
     top: 35%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.6);
-    font-size: 4rem;
     opacity: 0;
 }
 
 .about-section h2:nth-of-type(3) {
     bottom: 26rem;
     right: 2rem;
-    font-size: 8rem;
     line-height: 137px;
     text-align: end;
 }
