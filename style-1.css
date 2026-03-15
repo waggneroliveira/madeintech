@@ -207,7 +207,7 @@ section {
 }
 
 .glitch-text {
-    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-size: clamp(2rem, 6vw, 4rem);
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
@@ -221,7 +221,7 @@ section {
 }
 
 .hero-content p {
-    font-size: 1.125rem;
+    font-size: clamp(0.938rem, 1.125vw, 1.125rem);
     color: var(--gray);
     margin-bottom: 2rem;
     max-width: 500px;
