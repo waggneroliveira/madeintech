@@ -7,7 +7,7 @@ ScrollTrigger.config({
 
 
 // ===== THREE.JS - REDE DE PARTÍCULAS =====
-function initThreeNetwork(isMobile = false) {
+function initThreeNetwork() {
 
     const scene = new THREE.Scene();
 
@@ -20,12 +20,12 @@ function initThreeNetwork(isMobile = false) {
 
     const renderer = new THREE.WebGLRenderer({
         alpha: true,
-        antialias: !isMobile,
+        antialias: true,
         powerPreference: "high-performance"
     });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
 
     document
@@ -33,14 +33,17 @@ function initThreeNetwork(isMobile = false) {
         .appendChild(renderer.domElement);
 
 
-    const particlesCount = isMobile ? 300 : 800;
+    // ===== CONFIGURAÇÕES =====
+
+    const particlesCount = 800;
 
     const particlesGeometry = new THREE.BufferGeometry();
 
     const particlesPositions = new Float32Array(particlesCount * 3);
-    const basePositions = new Float32Array(particlesCount * 3);
     const particlesColors = new Float32Array(particlesCount * 3);
 
+
+    // ===== CRIAÇÃO DAS PARTÍCULAS =====
 
     for (let i = 0; i < particlesCount; i++) {
 
@@ -48,18 +51,11 @@ function initThreeNetwork(isMobile = false) {
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos((Math.random() * 2) - 1);
 
-        const x = Math.sin(phi) * Math.cos(theta) * radius;
-        const y = Math.sin(phi) * Math.sin(theta) * radius;
-        const z = Math.cos(phi) * radius;
+        particlesPositions[i * 3] = Math.sin(phi) * Math.cos(theta) * radius;
+        particlesPositions[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * radius;
+        particlesPositions[i * 3 + 2] = Math.cos(phi) * radius;
 
-        particlesPositions[i * 3] = x;
-        particlesPositions[i * 3 + 1] = y;
-        particlesPositions[i * 3 + 2] = z;
-
-        basePositions[i * 3] = x;
-        basePositions[i * 3 + 1] = y;
-        basePositions[i * 3 + 2] = z;
-
+        // branco suave
         particlesColors[i * 3] = 0.85;
         particlesColors[i * 3 + 1] = 0.85;
         particlesColors[i * 3 + 2] = 0.85;
@@ -76,8 +72,10 @@ function initThreeNetwork(isMobile = false) {
     );
 
 
+    // ===== MATERIAL =====
+
     const particlesMaterial = new THREE.PointsMaterial({
-        size: isMobile ? 0.18 : 0.15,
+        size: 0.15,
         vertexColors: true,
         transparent: true,
         opacity: 0.8,
@@ -86,6 +84,8 @@ function initThreeNetwork(isMobile = false) {
     });
 
 
+    // ===== PARTICLES =====
+
     const particles = new THREE.Points(particlesGeometry, particlesMaterial);
 
     particles.position.x = 6;
@@ -93,22 +93,75 @@ function initThreeNetwork(isMobile = false) {
     scene.add(particles);
 
 
+    // ===== CONEXÕES =====
+
+    const connectionGeometry = new THREE.BufferGeometry();
+    const connectionPositions = [];
+
+    for (let i = 0; i < particlesCount; i++) {
+
+        for (let j = i + 1; j < particlesCount; j++) {
+
+            const dist = Math.sqrt(
+                Math.pow(particlesPositions[i * 3] - particlesPositions[j * 3], 2) +
+                Math.pow(particlesPositions[i * 3 + 1] - particlesPositions[j * 3 + 1], 2) +
+                Math.pow(particlesPositions[i * 3 + 2] - particlesPositions[j * 3 + 2], 2)
+            );
+
+            if (dist < 5 && Math.random() < 0.02) {
+
+                connectionPositions.push(
+                    particlesPositions[i * 3],
+                    particlesPositions[i * 3 + 1],
+                    particlesPositions[i * 3 + 2],
+
+                    particlesPositions[j * 3],
+                    particlesPositions[j * 3 + 1],
+                    particlesPositions[j * 3 + 2]
+                );
+            }
+        }
+    }
+
+    connectionGeometry.setAttribute(
+        'position',
+        new THREE.Float32BufferAttribute(connectionPositions, 3)
+    );
+
+    const connectionMaterial = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.15
+    });
+
+
+    const connections = new THREE.LineSegments(
+        connectionGeometry,
+        connectionMaterial
+    );
+
+    connections.position.x = 6;
+
+    scene.add(connections);
+
+
     camera.position.z = 20;
+
+
+    // ===== MOUSE =====
 
     let mouseX = 0;
     let mouseY = 0;
 
-    if (!isMobile) {
+    document.addEventListener('mousemove', (event) => {
 
-        document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
 
-            mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-            mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+    });
 
-        });
 
-    }
-
+    // ===== ANIMAÇÃO =====
 
     let time = 0;
 
@@ -121,13 +174,17 @@ function initThreeNetwork(isMobile = false) {
         particles.rotation.y += 0.0005 + mouseX * 0.0002;
         particles.rotation.x += mouseY * 0.0002;
 
+        connections.rotation.y += 0.0005 + mouseX * 0.0002;
+        connections.rotation.x += mouseY * 0.0002;
+
+
         const positions = particles.geometry.attributes.position.array;
 
         for (let i = 0; i < positions.length; i += 3) {
 
-            const wave = Math.sin(time + basePositions[i] * 0.5) * 0.02;
+            const wave = Math.sin(time + positions[i] * 0.5) * 0.02;
 
-            positions[i + 1] = basePositions[i + 1] + wave;
+            positions[i + 1] += wave * 0.01;
 
         }
 
@@ -138,6 +195,8 @@ function initThreeNetwork(isMobile = false) {
 
     animate();
 
+
+    // ===== RESPONSIVO =====
 
     window.addEventListener('resize', () => {
 
@@ -152,6 +211,7 @@ function initThreeNetwork(isMobile = false) {
 
     });
 
+    
 }
 
 

@@ -285,17 +285,16 @@ section {
 
 .node {
     position: absolute;
-    width: 15px;
-    height: 15px;
+    width: 10px;
+    height: 10px;
     background: var(--gray);
     border-radius: 50%;
     box-shadow: 0 0 20px var(--gray);
     animation: nodePulse 2s ease-in-out infinite;
 }
-
-.node-1 { top: 20%; left: 30%; animation-delay: 0s; }
-.node-2 { top: 60%; left: 60%; animation-delay: 0.5s; }
-.node-3 { top: 40%; left: 80%; animation-delay: 1s; }
+.node-1 { top: 20%; left: 60%; animation-delay: 0s; }
+.node-2 { top: 60%; left: 90%; animation-delay: 0.5s; }
+.node-3 { top: 40%; left: 110%; animation-delay: 1s; }
 
 .connection {
     position: absolute;
@@ -307,26 +306,26 @@ section {
 }
 
 .connection-1 {
-    top: 30%;
-    left: 30%;
+    top: 20%;
+    left: 60%;
     width: 150px;
-    transform: rotate(45deg);
+    transform: rotate(25deg);
     animation-delay: 0s;
 }
 
 .connection-2 {
-    top: 50%;
-    left: 50%;
+    top: 74%;
+    left: 80%;
     width: 120px;
-    transform: rotate(-30deg);
+    transform: rotate(-49deg);
     animation-delay: 1s;
 }
 
 .connection-3 {
-    top: 40%;
-    left: 40%;
+    top: 15%;
+    left: 56%;
     width: 180px;
-    transform: rotate(60deg);
+    transform: rotate(55deg);
     animation-delay: 2s;
 }
 
