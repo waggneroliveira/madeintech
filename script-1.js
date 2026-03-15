@@ -7,7 +7,7 @@ ScrollTrigger.config({
 
 
 // ===== THREE.JS - REDE DE PARTÍCULAS =====
-function initThreeNetwork() {
+function initThreeNetwork(isMobile = false) {
 
     const scene = new THREE.Scene();
 
@@ -20,12 +20,12 @@ function initThreeNetwork() {
 
     const renderer = new THREE.WebGLRenderer({
         alpha: true,
-        antialias: true,
+        antialias: !isMobile,
         powerPreference: "high-performance"
     });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
     renderer.setClearColor(0x000000, 0);
 
     document
@@ -33,7 +33,7 @@ function initThreeNetwork() {
         .appendChild(renderer.domElement);
 
 
-    const particlesCount = 800;
+    const particlesCount = isMobile ? 300 : 800;
 
     const particlesGeometry = new THREE.BufferGeometry();
 
@@ -77,7 +77,7 @@ function initThreeNetwork() {
 
 
     const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.15,
+        size: isMobile ? 0.18 : 0.15,
         vertexColors: true,
         transparent: true,
         opacity: 0.8,
@@ -93,68 +93,21 @@ function initThreeNetwork() {
     scene.add(particles);
 
 
-    const connectionGeometry = new THREE.BufferGeometry();
-    const connectionPositions = [];
-
-    for (let i = 0; i < particlesCount; i++) {
-
-        for (let j = i + 1; j < particlesCount; j++) {
-
-            const dist = Math.sqrt(
-                Math.pow(particlesPositions[i * 3] - particlesPositions[j * 3], 2) +
-                Math.pow(particlesPositions[i * 3 + 1] - particlesPositions[j * 3 + 1], 2) +
-                Math.pow(particlesPositions[i * 3 + 2] - particlesPositions[j * 3 + 2], 2)
-            );
-
-            if (dist < 5 && Math.random() < 0.02) {
-
-                connectionPositions.push(
-                    particlesPositions[i * 3],
-                    particlesPositions[i * 3 + 1],
-                    particlesPositions[i * 3 + 2],
-
-                    particlesPositions[j * 3],
-                    particlesPositions[j * 3 + 1],
-                    particlesPositions[j * 3 + 2]
-                );
-            }
-        }
-    }
-
-    connectionGeometry.setAttribute(
-        'position',
-        new THREE.Float32BufferAttribute(connectionPositions, 3)
-    );
-
-    const connectionMaterial = new THREE.LineBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.15
-    });
-
-
-    const connections = new THREE.LineSegments(
-        connectionGeometry,
-        connectionMaterial
-    );
-
-    connections.position.x = 6;
-
-    scene.add(connections);
-
-
     camera.position.z = 20;
-
 
     let mouseX = 0;
     let mouseY = 0;
 
-    document.addEventListener('mousemove', (event) => {
+    if (!isMobile) {
 
-        mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-        mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+        document.addEventListener('mousemove', (event) => {
 
-    });
+            mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+
+        });
+
+    }
 
 
     let time = 0;
@@ -167,10 +120,6 @@ function initThreeNetwork() {
 
         particles.rotation.y += 0.0005 + mouseX * 0.0002;
         particles.rotation.x += mouseY * 0.0002;
-
-        connections.rotation.y += 0.0005 + mouseX * 0.0002;
-        connections.rotation.x += mouseY * 0.0002;
-
 
         const positions = particles.geometry.attributes.position.array;
 
@@ -208,7 +157,7 @@ function initThreeNetwork() {
 
 
 // ===== ABOUT =====
-function initAboutScroll() {
+function initAboutScroll(isMobile = false) {
 
     const section = document.querySelector(".about-section");
     const h2s = section.querySelectorAll(".about-content__title");
@@ -219,12 +168,11 @@ function initAboutScroll() {
         scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "+=620%",
-            scrub: 2,
-            pin: true,
+            end: isMobile ? "+=200%" : "+=620%",
+            scrub: isMobile ? false : 2,
+            pin: !isMobile,
             anticipatePin: 1,
-            invalidateOnRefresh: true,
-            refreshPriority: 1
+            invalidateOnRefresh: true
         }
     });
 
@@ -234,13 +182,13 @@ function initAboutScroll() {
     tl.fromTo(
         h2s[1],
         { opacity: 0.7, scale: 0, transformOrigin: "center center" },
-        { opacity: 1, scale: 80, duration: 1.5, ease: "power4.in" },
+        { opacity: 1, scale: isMobile ? 20 : 80, duration: 1.5, ease: "power4.in" },
         "-=0.9"
     );
 
     tl.to(section, { backgroundColor: "#fff", duration: 0.35, ease: "power4.out" }, "<1");
 
-    tl.to(h2s[1], { opacity: 0, scale: 120, duration: 0.6, ease: "power4.out" }, "<");
+    tl.to(h2s[1], { opacity: 0, scale: isMobile ? 30 : 120, duration: 0.6, ease: "power4.out" }, "<");
 
     tl.fromTo(paragraphs,
         { opacity: 0, y: 50 },
@@ -258,12 +206,22 @@ function initAboutScroll() {
 
 
 // ===== BENEFITS =====
-function initBenefitsScroll() {
+function initBenefitsScroll(isMobile = false) {
 
     const section = document.querySelector(".benefits-section");
     const cards = gsap.utils.toArray(".benefit-card");
     const title = section.querySelector(".section-header__title");
 
+    if (isMobile) {
+        // Mobile: remover efeitos e empilhar
+        gsap.set(cards, { y: 0, opacity: 1 });
+        section.style.backgroundColor = ""; // mantém o fundo padrão
+        title.style.opacity = 1;
+        title.style.transform = "none";
+        return; // não aplica animação nem ScrollTrigger
+    }
+
+    // Desktop: mantém os efeitos atuais
     gsap.set(cards, { y: "50vh" });
 
     const tl = gsap.timeline({
@@ -290,10 +248,8 @@ function initBenefitsScroll() {
     );
 
     cards.forEach((card) => {
-
         tl.to(card, { y: 0, duration: 1.2 });
         tl.to(card, { y: "-135vh", duration: 1.5 });
-
     });
 
 }
@@ -301,7 +257,7 @@ function initBenefitsScroll() {
 
 
 // ===== TECH =====
-function initTechCarousel() {
+function initTechCarousel(isMobile = false) {
 
     const section = document.querySelector(".tech-section");
     const grid = document.querySelector(".tech-grid");
@@ -314,9 +270,9 @@ function initTechCarousel() {
         scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: () => `+=${section.offsetHeight + distance}`,
-            scrub: true,
-            pin: true,
+            end: isMobile ? "+=150%" : () => `+=${section.offsetHeight + distance}`,
+            scrub: !isMobile,
+            pin: !isMobile,
             anticipatePin: 1,
             invalidateOnRefresh: true
         }
@@ -328,23 +284,42 @@ function initTechCarousel() {
         { opacity: 1, y: 0, duration: 1 }
     );
 
-    tl.fromTo(
-        grid,
-        { x: distance },
-        { x: 0, ease: "none" },
-        "<"
-    );
+    if (!isMobile) {
+
+        tl.fromTo(
+            grid,
+            { x: distance },
+            { x: 0, ease: "none" },
+            "<"
+        );
+
+    }
 }
 
-
-
-// ===== INIT =====
+// ===== INIT RESPONSIVO =====
 window.addEventListener("load", () => {
 
-    initThreeNetwork();
-    initAboutScroll();
-    initBenefitsScroll();
-    initTechCarousel();
+    ScrollTrigger.matchMedia({
+
+        "(min-width: 1024px)": function () {
+
+            initThreeNetwork(false);
+            initAboutScroll(false);
+            initBenefitsScroll(false);
+            initTechCarousel(false);
+
+        },
+
+        "(max-width: 1023px)": function () {
+
+            initThreeNetwork(true);
+            initAboutScroll(true);
+            initBenefitsScroll(true);
+            initTechCarousel(true);
+
+        }
+
+    });
 
     ScrollTrigger.refresh();
 

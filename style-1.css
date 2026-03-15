@@ -477,11 +477,8 @@ section {
     position: absolute;
     top: 0;
     left: 0;
-    /* transform: translate(-50%, -50%) scale(0.9) translateY(50px); */
-    /* opacity: 0; */
     width: 100%;
     padding: 2rem;
-    /* backdrop-filter: blur(10px); */
     color: white;
     text-align: left;
 }
@@ -719,11 +716,6 @@ section {
     70% { box-shadow: 0 0 0 50px rgba(0, 255, 255, 0); }
     100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
 }
-/* .tech-grid,
-.benefit-card,
-.about-content__title {
-    will-change: transform, opacity;
-} */
 
 /* ===== TECNOLOGIAS ===== */
 .tech-grid {
@@ -1034,6 +1026,40 @@ footer {
 }
 
 /* ===== RESPONSIVIDADE ===== */
+/* ===== BENEFITS - RESPONSIVO ===== */
+@media (max-width: 1023px) {
+    .benefits-wrapper {
+        flex-direction: column;
+        gap: 2rem; /* ajusta o espaçamento entre os blocos */
+        align-items: stretch; /* faz os filhos ocuparem a largura total */
+        justify-content: flex-start;
+    }
+
+    .benefits-left,
+    .benefits-right {
+        flex: none;
+        width: 100%;
+        text-align: center;
+    }
+
+    .benefits-left {
+        margin-bottom: 1.5rem;
+    }
+
+    .benefit-card {
+        margin-bottom: 1.5rem; 
+        transform: none !important;
+        opacity: 1 !important;
+        position: relative;
+        padding: 15px 0;
+    }
+
+    .section-header__title {
+        transform: none !important;
+        opacity: 1 !important;
+    }
+}
+
 @media (max-width: 992px) {
     .hero-section .container,
     .about-grid,
@@ -1057,6 +1083,30 @@ footer {
     }
     
     .social-icons {
+        justify-content: center;
+    }
+    .about-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 3rem;
+    }
+
+    .about-content, .about-visual {
+        flex: 1 1 100%;
+        text-align: center;
+    }
+
+    .citation {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .founder-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .founder-benefits {
         justify-content: center;
     }
 }
@@ -1117,4 +1167,37 @@ footer {
 .gsap-reveal {
     opacity: 1 !important;
     visibility: visible !important;
+}
+@media (max-width: 576px) {
+    .about-content__title {
+        font-size: 1.5rem;
+    }
+
+    .about-content p {
+        font-size: 0.9rem;
+    }
+
+    .founder-stats {
+        bottom: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .founder-benefits .benefit-item {
+        flex: 1 1 100%;
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    .citation .image img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .quote-block {
+        max-width: 100%;
+    }
+
+    .icon-position {
+        max-width: 60px;
+    }
 }
